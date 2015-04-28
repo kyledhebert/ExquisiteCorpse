@@ -29,9 +29,20 @@
     <p>To search again use the New Search button below, or your browser's back button.</p>
 
     <form action = "" method = get>
-        <input type ="hidden" name = "action" value = "search">
+        <input type = "hidden" name = "action" value = "search">
         <input type = "submit" value = "New Search">
     </form>
+
+    <form action = "" method= get>
+        <input type = "hidden" name = "action" value = "add">
+        <input type = "submit" value = "Add Snippet">
+    </form>
+
+    <form action = "" method = get>
+        <input type = "hidden" name = "action" value = "view">
+        <input type = "submit" value = "View Corpse">
+    </form>
+
 
 
 

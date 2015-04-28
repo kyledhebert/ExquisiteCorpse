@@ -30,6 +30,7 @@ public class ServletExquisite extends HttpServlet {
 
 
     MusixMatch musixMatch = new MusixMatch(getMusixMatchAPIKey());
+    SearchResult searchResult;
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -45,7 +46,7 @@ public class ServletExquisite extends HttpServlet {
         if (action.equals("search")) {
             url = "/index.html"; //the search page
         }
-
+        //search for and display the lyric snippet at result.jsp
         else if (action.equals("result")) {
             String artistSearch = request.getParameter("artist");
             String trackSearch = request.getParameter("track");
@@ -85,6 +86,25 @@ public class ServletExquisite extends HttpServlet {
 
         }
 
+        //convert result to CorpseLyric object and add to Corpse object
+        //TODO will need to check if corpse exist and if not create a new corpse first
+        else if (action.equals("add")) {
+
+            String snippet = searchResult.getSnippet();
+
+            Corpse corpse = new Corpse();
+
+
+        }
+
+        else if(action.equals("view")) {
+            url = "/corpse.jsp"; //the corpse view page
+        }
+
+
+
+
+
         //forward request and response objects to specified URL
         getServletContext().getRequestDispatcher(url).forward(request,response);
     }
@@ -93,6 +113,7 @@ public class ServletExquisite extends HttpServlet {
         doPost(request,response);
 
     }
+
     protected String getMusixMatchAPIKey() {
         //used to read in the musixmatch API key from a file
         String apiKey = "";
