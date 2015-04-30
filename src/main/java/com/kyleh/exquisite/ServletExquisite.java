@@ -32,6 +32,7 @@ public class ServletExquisite extends HttpServlet {
     MusixMatch musixMatch = new MusixMatch(getMusixMatchAPIKey());
     SearchResult searchResult;
 
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         String url = "/index.html";
@@ -46,8 +47,9 @@ public class ServletExquisite extends HttpServlet {
         if (action.equals("search")) {
             url = "/index.html"; //the search page
         }
+
         //search for and display the lyric snippet at result.jsp
-        else if (action.equals("result")) {
+        if (action.equals("result")) {
             String artistSearch = request.getParameter("artist");
             String trackSearch = request.getParameter("track");
 
@@ -80,6 +82,13 @@ public class ServletExquisite extends HttpServlet {
             //store results in SearchResult object
             SearchResult searchResult = new SearchResult(artist,track,snippet);
 
+            //validate the search parameters
+            String message;
+            if (artist == null || track == null || artist.isEmpty() || track.isEmpty()) {
+                message = "Please enter text into both boxes.";
+                url = "/index.jsp";
+            }
+
             //set SearchResult Object in request object and set URL
             request.setAttribute("searchResult", searchResult);
             url = "/result.jsp"; //the results page
@@ -87,28 +96,28 @@ public class ServletExquisite extends HttpServlet {
         }
 
         //convert result to CorpseLyric object and add to Corpse object
-        //TODO will need to check if corpse exist and if not create a new corpse first
-        else if (action.equals("add")) {
+        //TODO will need to check if corpse exists and if not create a new corpse first
+        if (action.equals("add")) {
 
             String snippet = searchResult.getSnippet();
+            CorpseLyric corpseLyric = new CorpseLyric(snippet);
 
             Corpse corpse = new Corpse();
+            corpse.addLyricSnippet(corpseLyric);
 
 
         }
 
-        else if(action.equals("view")) {
+        //show the corpse
+        //TODO will need to check if corpse exists first
+        if(action.equals("view")) {
             url = "/corpse.jsp"; //the corpse view page
         }
-
-
-
-
-
         //forward request and response objects to specified URL
         getServletContext().getRequestDispatcher(url).forward(request,response);
     }
 
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doPost(request,response);
 
