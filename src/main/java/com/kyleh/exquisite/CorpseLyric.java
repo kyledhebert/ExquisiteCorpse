@@ -10,6 +10,7 @@ import java.io.Serializable;
 public class CorpseLyric implements Serializable {
 
     private String snippet;
+    private String snippetIncluded;
 
     public CorpseLyric() {
         snippet = "";
@@ -25,5 +26,13 @@ public class CorpseLyric implements Serializable {
 
     public void setSnippet(String snippet) {
         this.snippet = snippet;
+    }
+
+    public String getSnippetIncluded() {
+        return snippetIncluded;
+    }
+
+    public void setSnippetIncluded(String snippetIncluded) {
+        this.snippetIncluded = snippetIncluded;
     }
 }

@@ -10,26 +10,21 @@ import java.util.ArrayList;
  */
 public class Corpse implements Serializable {
 
-    ArrayList<CorpseLyric> corpseLyricArrayList;
+    private ArrayList<CorpseLyric> corpseLyrics;
 
     public Corpse() {
-        corpseLyricArrayList = new ArrayList<CorpseLyric>();
-    }
-
-    public Corpse(ArrayList<CorpseLyric> corpseLyricArrayList) {
-        this.corpseLyricArrayList = corpseLyricArrayList;
+        corpseLyrics = new ArrayList<CorpseLyric>();
     }
 
     public void addLyricSnippet(CorpseLyric corpseLyric) {
-        corpseLyricArrayList.add(corpseLyric);
+        corpseLyrics.add(corpseLyric);
     }
 
-    public void displayCorpse() {
-        for (CorpseLyric corpseLyric: corpseLyricArrayList) {
-            System.out.println(corpseLyric + "\n");
-        }
+    public void removeLyricSnippet(CorpseLyric corpseLyric) {
+        corpseLyrics.remove(corpseLyric);
     }
 
-
-
+    public ArrayList<CorpseLyric> getCorpseLyrics() {
+        return corpseLyrics;
+    }
 }

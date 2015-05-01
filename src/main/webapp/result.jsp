@@ -33,12 +33,13 @@
         <input type = "submit" value = "New Search">
     </form>
 
-    <form action = "" method= get>
-        <input type = "hidden" name = "action" value = "add">
-        <input type = "submit" value = "Add Snippet">
+    <form action="exquisite" method="post">
+        <input type="hidden" name="include" value="true">
+        <input type="hidden" name="action" value="add">
+        <input type="submit" value="Add Snippet">
     </form>
 
-    <form action = "" method = get>
+    <form action = "exquisite" method="post">
         <input type = "hidden" name = "action" value = "view">
         <input type = "submit" value = "View Corpse">
     </form>

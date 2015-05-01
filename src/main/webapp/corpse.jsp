@@ -20,8 +20,24 @@
 </head>
 <body>
     <h1>Your Corpse</h1>
-    <p>This is just some placeholder text.</p>
-
+    <table>
+    <tr>
+        <th>Lyric</th>
+        <th></th>
+    </tr>
+    </table>
+    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+    <c:forEach var="corpseLyric" items="${corpse.corpseLyrics}">
+    <tr>
+        <td>${corpseLyric.snippet}</td>
+        <td>
+            <form action ="" method="post">
+                <input type="hidden" name="include" value="false">
+                <input type="submit" value="Remove Lyric">
+            </form>
+        </td>
+    </tr>
+    </c:forEach>
     <form action = "" method = get>
         <input type = "hidden" name = "action" value = "search">
         <input type = "submit" value = "New Search">

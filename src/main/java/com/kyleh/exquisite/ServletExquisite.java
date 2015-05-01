@@ -1,9 +1,11 @@
 package com.kyleh.exquisite;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -18,6 +20,8 @@ import org.jmusixmatch.MusixMatchException;
 import org.jmusixmatch.entity.lyrics.Lyrics;
 import org.jmusixmatch.entity.track.Track;
 import org.jmusixmatch.entity.track.TrackData;
+import org.jmusixmatch.snippet.Snippet;
+import org.jmusixmatch.subtitle.Subtitle;
 
 /**
  * Created by kylehebert on 4/24/15.
@@ -27,6 +31,7 @@ public class ServletExquisite extends HttpServlet {
     TrackData trackData;
     Track track;
     Lyrics lyrics;
+    Snippet snippet;
 
 
     MusixMatch musixMatch = new MusixMatch(getMusixMatchAPIKey());
@@ -35,7 +40,8 @@ public class ServletExquisite extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        String url = "/index.html";
+        String url = "/index.jsp";
+        ServletContext servletContext = getServletContext();
 
         //get current action
         String action = request.getParameter("action");
@@ -45,11 +51,11 @@ public class ServletExquisite extends HttpServlet {
 
         //perform action and set URL to appropriate page
         if (action.equals("search")) {
-            url = "/index.html"; //the search page
+            url = "/index.jsp"; //the search page
         }
 
         //search for and display the lyric snippet at result.jsp
-        if (action.equals("result")) {
+        else if (action.equals("result")) {
             String artistSearch = request.getParameter("artist");
             String trackSearch = request.getParameter("track");
 
@@ -77,10 +83,12 @@ public class ServletExquisite extends HttpServlet {
             } catch (MusixMatchException e) {
                 e.printStackTrace();
             }
-            String snippet = lyrics.getLyricsBody();
+            String lyricSnippet = lyrics.getLyricsBody();
 
-            //store results in SearchResult object
-            SearchResult searchResult = new SearchResult(artist,track,snippet);
+            //store results in SearchResult object and create a session
+            HttpSession session = request.getSession();
+            SearchResult searchResult = new SearchResult(artist,track,lyricSnippet);
+            session.setAttribute("result", searchResult);
 
             //validate the search parameters
             String message;
@@ -96,25 +104,35 @@ public class ServletExquisite extends HttpServlet {
         }
 
         //convert result to CorpseLyric object and add to Corpse object
-        //TODO will need to check if corpse exists and if not create a new corpse first
-        if (action.equals("add")) {
+        else if (action.equals("add")) {
 
-            String snippet = searchResult.getSnippet();
-            CorpseLyric corpseLyric = new CorpseLyric(snippet);
+            //String snippet = searchResult.getSnippet();
 
-            Corpse corpse = new Corpse();
-            corpse.addLyricSnippet(corpseLyric);
+            //create a a new corpse and new corpse session if needed
+            HttpSession session = request.getSession();
+            Corpse corpse = (Corpse) session.getAttribute("corpse");
+            if (corpse == null) {
+                corpse = new Corpse();
+            }
 
+            String included = request.getParameter("include");
+            SearchResult searchResult = (SearchResult) session.getAttribute("result");
+
+            CorpseLyric corpseLyric = new CorpseLyric(searchResult.getSnippet());
+            corpseLyric.setSnippetIncluded(included);
+            if (included.equals("true")) {
+                corpse.addLyricSnippet(corpseLyric);
+            } else if (included.equals("false")) {
+                corpse.removeLyricSnippet(corpseLyric);
+            }
+
+            session.setAttribute("corpse", corpse);
+            url = "/corpse.jsp";
 
         }
 
-        //show the corpse
-        //TODO will need to check if corpse exists first
-        if(action.equals("view")) {
-            url = "/corpse.jsp"; //the corpse view page
-        }
         //forward request and response objects to specified URL
-        getServletContext().getRequestDispatcher(url).forward(request,response);
+        servletContext.getRequestDispatcher(url).forward(request,response);
     }
 
     @Override
