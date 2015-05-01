@@ -6,46 +6,30 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
-<head>
-    <title>Corpse</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<c:import url="/includes/header.jsp" />
 
-    <!-- Optional theme -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+<h1>Your Corpse</h1>
+<table>
+<c:forEach var="corpseLyric" items="${corpse.corpseLyrics}">
+<tr>
+    <td>${corpseLyric.snippet}</td>
+    <td>
+        <form action ="exquisite" method="post">
+            <input type="hidden" name="snippetID" value="${corpseLyric.snippetID}">
+            <input type="hidden" name="action" value="remove">
+            <input type="submit" value="Remove Lyric">
+        </form>
+    </td>
+</tr>
+</c:forEach>
+</table>
 
-    <!-- Latest compiled and minified JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<p>To remove a lyric, click on the Remove button.</p>
 
-</head>
-<body>
-    <h1>Your Corpse</h1>
-    <table>
-    <tr>
-        <th>Lyric</th>
-        <th></th>
-    </tr>
-    </table>
-    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-    <c:forEach var="corpseLyric" items="${corpse.corpseLyrics}">
-    <tr>
-        <td>${corpseLyric.snippet}</td>
-        <td>
-            <form action ="" method="post">
-                <input type="hidden" name="include" value="false">
-                <input type="submit" value="Remove Lyric">
-            </form>
-        </td>
-    </tr>
-    </c:forEach>
-    <form action = "" method = get>
+<form action = "" method = "post">
         <input type = "hidden" name = "action" value = "search">
         <input type = "submit" value = "New Search">
-    </form>
-
-    <form action = "" method = get>
-        <input type = "hidden" name = "action" value = "result">
-        <input type = "submit" value = "Back to Result">
     </form>
 
 </body>

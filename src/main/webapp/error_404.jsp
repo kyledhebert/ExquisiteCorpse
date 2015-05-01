@@ -11,7 +11,7 @@
     <title>404 - Page Not Found</title>
 </head>
 <body>
-  <img src = "/c28.jpg">
+  <img src = "/images/c28.jpg">
     <p>The server was not able to find the page you requested.</p>
     <p>To continue, click the Back button.</p>
 </body>

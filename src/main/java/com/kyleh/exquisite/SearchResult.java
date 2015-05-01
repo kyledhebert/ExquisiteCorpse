@@ -12,15 +12,18 @@ public class SearchResult implements Serializable {
     private String artist;
     private String track;
     private String snippet;
+    private String resultID;
 
 
     public SearchResult() {
         artist = "";
         track = "";
         snippet = "";
+        resultID = "";
     }
 
-    public SearchResult(String artist, String track, String snippet) {
+    public SearchResult(String resultID, String artist, String track, String snippet) {
+        this.resultID = resultID;
         this.artist = artist;
         this.track = track;
         this.snippet = snippet;
@@ -48,5 +51,13 @@ public class SearchResult implements Serializable {
 
     public void setSnippet(String snippet) {
         this.snippet = snippet;
+    }
+
+    public String getResultID() {
+        return resultID;
+    }
+
+    public void setResultID(String resultID) {
+        this.resultID = resultID;
     }
 }

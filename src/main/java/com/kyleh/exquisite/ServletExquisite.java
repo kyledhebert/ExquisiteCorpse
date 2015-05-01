@@ -75,8 +75,9 @@ public class ServletExquisite extends HttpServlet {
             String artist = trackData.getArtistName();
             String track = trackData.getTrackName();
 
-            //lyrics search
+            //snippet search
             int trackID = trackData.getTrackId();
+            String resultID = Integer.toString(trackID);
 
             try {
                 lyrics = musixMatch.getLyrics(trackID);
@@ -87,7 +88,8 @@ public class ServletExquisite extends HttpServlet {
 
             //store results in SearchResult object and create a session
             HttpSession session = request.getSession();
-            SearchResult searchResult = new SearchResult(artist,track,lyricSnippet);
+            SearchResult searchResult = new SearchResult(resultID,artist,track,lyricSnippet);
+
             session.setAttribute("result", searchResult);
 
             //validate the search parameters
@@ -115,18 +117,29 @@ public class ServletExquisite extends HttpServlet {
                 corpse = new Corpse();
             }
 
-            String included = request.getParameter("include");
             SearchResult searchResult = (SearchResult) session.getAttribute("result");
 
-            CorpseLyric corpseLyric = new CorpseLyric(searchResult.getSnippet());
-            corpseLyric.setSnippetIncluded(included);
-            if (included.equals("true")) {
-                corpse.addLyricSnippet(corpseLyric);
-            } else if (included.equals("false")) {
-                corpse.removeLyricSnippet(corpseLyric);
-            }
+            CorpseLyric corpseLyric = new CorpseLyric(searchResult.getResultID(),searchResult.getSnippet());
+
+            //set the lyric's session ID to the snippet ID
+            //this will be useful for removing lyrics later
+            session.setAttribute(corpseLyric.getSnippetID(),corpseLyric);
+
+
+            corpse.addLyricSnippet(corpseLyric);
 
             session.setAttribute("corpse", corpse);
+            url = "/corpse.jsp";
+
+        }
+
+        else if (action.equals("remove")) {
+            HttpSession session = request.getSession();
+            Corpse corpse = (Corpse) session.getAttribute("corpse");
+            String snippetID = request.getParameter("snippetID");
+            CorpseLyric corpseLyric = (CorpseLyric) session.getAttribute(snippetID);
+            corpse.removeLyricSnippet(corpseLyric);
+
             url = "/corpse.jsp";
 
         }
