@@ -9,11 +9,11 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:import url="/includes/header.jsp" />
 
-<h1>Search Result</h1>
+<h2>Search Result</h2>
 <p>You searched for ${searchResult.track} by ${searchResult.artist}. </p>
 
-<label>Snippet:</label>
-<span>${searchResult.snippet}</span><br/>
+
+<p><span>${searchResult.snippet}</span></p>
 
 <p>To search again use the New Search button below, or your browser's back button.</p>
 

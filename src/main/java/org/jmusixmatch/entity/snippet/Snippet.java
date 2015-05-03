@@ -1,4 +1,4 @@
-package org.jmusixmatch.snippet;
+package org.jmusixmatch.entity.snippet;
 
 import com.google.gson.annotations.SerializedName;
 

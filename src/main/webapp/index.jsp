@@ -20,10 +20,10 @@
     <form action = "exquisite"  method= "post">
       <input type = "hidden" name = "action" value = "result">
       <label>Track:</label>
-      <input type ="text" name="track" value = "${searchResult.track}" />
+      <input type ="text" name="track" value = "${searchResult.track}" tabindex="1"/>
       <label>Artist:</label>
-      <input type ="text" name ="artist" value = "${searchResult.artist}"/>
-      <input type ="submit" value="Search">
+      <input type ="text" name ="artist" value = "${searchResult.artist}" tabindex="2"/>
+      <input type ="submit" value="Search" tabindex="3">
     </form>
 
 </body>

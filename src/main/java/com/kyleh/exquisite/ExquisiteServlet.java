@@ -9,29 +9,22 @@ import javax.servlet.http.HttpSession;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Properties;
 
-import com.google.appengine.api.users.User;
-import com.google.appengine.api.users.UserService;
-import com.google.appengine.api.users.UserServiceFactory;
 import org.jmusixmatch.MusixMatch;
 import org.jmusixmatch.MusixMatchException;
 import org.jmusixmatch.entity.lyrics.Lyrics;
 import org.jmusixmatch.entity.track.Track;
 import org.jmusixmatch.entity.track.TrackData;
-import org.jmusixmatch.snippet.Snippet;
-import org.jmusixmatch.subtitle.Subtitle;
+import org.jmusixmatch.entity.snippet.Snippet;
 
 /**
  * Created by kylehebert on 4/24/15.
  */
-public class ServletExquisite extends HttpServlet {
+public class ExquisiteServlet extends HttpServlet {
 
     TrackData trackData;
     Track track;
     Lyrics lyrics;
-    Snippet snippet;
 
 
     MusixMatch musixMatch = new MusixMatch(getMusixMatchAPIKey());
@@ -84,7 +77,11 @@ public class ServletExquisite extends HttpServlet {
             } catch (MusixMatchException e) {
                 e.printStackTrace();
             }
-            String lyricSnippet = lyrics.getLyricsBody();
+            String lyricsBody = lyrics.getLyricsBody();
+
+            //find the first newline character in the result so we can create a snippet
+            int newline = lyricsBody.indexOf("\n");
+            String lyricSnippet = lyricsBody.substring(0,newline);
 
             //store results in SearchResult object and create a session
             HttpSession session = request.getSession();

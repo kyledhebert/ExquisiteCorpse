@@ -4,7 +4,7 @@
 
     <servlet>
         <servlet-name>ServletExquisite</servlet-name>
-        <servlet-class>com.kyleh.exquisite.ServletExquisite</servlet-class>
+        <servlet-class>com.kyleh.exquisite.ExquisiteServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
