@@ -1,4 +1,4 @@
-package com.kyleh.exquisite;
+package com.kyleh.exquisite.business;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -14,6 +14,10 @@ public class Corpse implements Serializable {
 
     public Corpse() {
         corpseLyrics = new ArrayList<CorpseLyric>();
+    }
+
+    public Corpse(ArrayList<CorpseLyric> corpseLyrics) {
+        this.corpseLyrics = corpseLyrics;
     }
 
     public void addLyricSnippet(CorpseLyric corpseLyric) {

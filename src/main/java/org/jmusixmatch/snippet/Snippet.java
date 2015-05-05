@@ -1,4 +1,4 @@
-package org.jmusixmatch.entity.snippet;
+package org.jmusixmatch.snippet;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -10,7 +10,7 @@ import com.google.gson.annotations.SerializedName;
 public class Snippet {
 
     @SerializedName("snippet_language")
-    private int snippetLanguage;
+    private String snippetLanguage;
 
     @SerializedName("restricted")
     private int restricted;
@@ -33,11 +33,11 @@ public class Snippet {
     @SerializedName("updated_time")
     private String updatedTime;
 
-    public int getSnippetLanguage() {
+    public String getSnippetLanguage() {
         return snippetLanguage;
     }
 
-    public void setSnippetLanguage(int snippetLanguage) {
+    public void setSnippetLanguage(String snippetLanguage) {
         this.snippetLanguage = snippetLanguage;
     }
 

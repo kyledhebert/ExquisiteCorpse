@@ -14,7 +14,6 @@
 <head>
     <meta charset="utf-8">
     <title>Exquisite Lyrics</title>
-    <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="<c:url value='/stylesheets/main.css'/>">
 </head>
 

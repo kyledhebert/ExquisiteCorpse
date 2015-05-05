@@ -10,6 +10,9 @@
 <c:import url="/includes/header.jsp" />
 
 <h2>Your Corpse</h2>
+<c:choose>
+    <c:when test=""
+</c:choose>
 <table>
 <c:forEach var="corpseLyric" items="${corpse.corpseLyrics}">
 <tr>
@@ -27,10 +30,15 @@
 
 <p>To remove a lyric, click on the Remove button.</p>
 
-<form action = "" method = "post">
+    <form action = "exquisite" method = "post">
         <input type = "hidden" name = "action" value = "search">
-        <input type = "submit" value = "New Search">
+        <input type = "submit" value = "Add Another Lyric">
     </form>
 
-</body>
-</html>
+    <form action = "exquisite" method="post">
+        <input type = "hidden" name ="action" value ="share">
+        <input type ="submit" value="Share on Twitter">
+    </form>
+
+<c:import url="/includes/footer.jsp" />
+

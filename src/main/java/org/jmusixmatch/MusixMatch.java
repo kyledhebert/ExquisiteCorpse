@@ -14,8 +14,8 @@ import org.jmusixmatch.entity.track.TrackData;
 import org.jmusixmatch.entity.track.get.TrackGetMessage;
 import org.jmusixmatch.entity.track.search.TrackSeachMessage;
 import org.jmusixmatch.http.MusixMatchRequest;
-import org.jmusixmatch.entity.snippet.Snippet;
-import org.jmusixmatch.entity.snippet.get.SnippetGetMessage;
+import org.jmusixmatch.snippet.Snippet;
+import org.jmusixmatch.snippet.get.SnippetGetMessage;
 import org.jmusixmatch.subtitle.Subtitle;
 import org.jmusixmatch.subtitle.get.SubtitleGetMessage;
 

@@ -32,5 +32,5 @@
     <input type = "submit" value = "View Corpse">
 </form>
 
-</body>
-</html>
+<c:import url="/includes/footer.jsp" />
+

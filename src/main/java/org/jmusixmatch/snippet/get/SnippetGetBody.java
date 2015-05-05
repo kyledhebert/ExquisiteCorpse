@@ -1,8 +1,8 @@
-package org.jmusixmatch.entity.snippet.get;
+package org.jmusixmatch.snippet.get;
 
 import com.google.gson.annotations.SerializedName;
 
-import org.jmusixmatch.entity.snippet.Snippet;
+import org.jmusixmatch.snippet.Snippet;
 
 public class SnippetGetBody {
 

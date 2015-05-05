@@ -1,4 +1,4 @@
-package com.kyleh.exquisite;
+package com.kyleh.exquisite.business;
 
 import java.io.Serializable;
 

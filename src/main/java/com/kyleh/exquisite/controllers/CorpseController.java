@@ -1,4 +1,19 @@
-package com.kyleh.exquisite;
+package com.kyleh.exquisite.controllers;
+
+import com.kyleh.exquisite.business.Corpse;
+import com.kyleh.exquisite.business.CorpseLyric;
+import com.kyleh.exquisite.business.SearchResult;
+import com.kyleh.exquisite.business.SharedCorpse;
+import com.kyleh.exquisite.utility.CorpseID;
+
+import com.kyleh.exquisite.utility.ShareCorpseMessage;
+import org.jmusixmatch.MusixMatch;
+import org.jmusixmatch.MusixMatchException;
+import org.jmusixmatch.entity.lyrics.Lyrics;
+import org.jmusixmatch.entity.track.Track;
+import org.jmusixmatch.entity.track.TrackData;
+import org.jmusixmatch.snippet.Snippet;
+
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -6,29 +21,36 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 
-import org.jmusixmatch.MusixMatch;
-import org.jmusixmatch.MusixMatchException;
-import org.jmusixmatch.entity.lyrics.Lyrics;
-import org.jmusixmatch.entity.track.Track;
-import org.jmusixmatch.entity.track.TrackData;
-import org.jmusixmatch.entity.snippet.Snippet;
+
+import com.googlecode.objectify.ObjectifyService;
+
+
 
 /**
  * Created by kylehebert on 4/24/15.
+ * Servlet responsible for searching for and adding lyrics
+ * to a Corpse object.
  */
-public class ExquisiteServlet extends HttpServlet {
+public class CorpseController extends HttpServlet {
 
     TrackData trackData;
     Track track;
     Lyrics lyrics;
-
+    Snippet snippet;
 
     MusixMatch musixMatch = new MusixMatch(getMusixMatchAPIKey());
-    SearchResult searchResult;
+
+    //register classes for Objectify
+    static {
+        ObjectifyService.register(SharedCorpse.class);
+    }
+
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -73,15 +95,15 @@ public class ExquisiteServlet extends HttpServlet {
             String resultID = Integer.toString(trackID);
 
             try {
-                lyrics = musixMatch.getLyrics(trackID);
+                snippet = musixMatch.getSnippet(trackID);
             } catch (MusixMatchException e) {
                 e.printStackTrace();
             }
-            String lyricsBody = lyrics.getLyricsBody();
+            String lyricSnippet = snippet.getSnippetBody();
 
             //find the first newline character in the result so we can create a snippet
-            int newline = lyricsBody.indexOf("\n");
-            String lyricSnippet = lyricsBody.substring(0,newline);
+            //int newline = lyricsBody.indexOf("\n");
+            //String lyricSnippet = lyricsBody.substring(0,newline);
 
             //store results in SearchResult object and create a session
             HttpSession session = request.getSession();
@@ -111,6 +133,7 @@ public class ExquisiteServlet extends HttpServlet {
             HttpSession session = request.getSession();
             Corpse corpse = (Corpse) session.getAttribute("corpse");
             if (corpse == null) {
+                request.setAttribute("emptyCorpse", "You Corpse has no lyrics");
                 corpse = new Corpse();
             }
 
@@ -138,6 +161,33 @@ public class ExquisiteServlet extends HttpServlet {
             corpse.removeLyricSnippet(corpseLyric);
 
             url = "/corpse.jsp";
+
+        }
+
+        else if (action.equals("share")) {
+            HttpSession session = request.getSession();
+            Corpse corpse = (Corpse) session.getAttribute("corpse");
+
+            ArrayList<CorpseLyric> corpseLyrics = corpse.getCorpseLyrics();
+            CorpseID corpseID = new CorpseID();
+
+            //convert corpseID to string so we can store is a ID in the datastore
+            String corpseIDToString = corpseID.toString();
+
+
+            SharedCorpse sharedCorpse = new SharedCorpse(corpseLyrics,corpseIDToString);
+            ObjectifyService.ofy().save().entity(sharedCorpse).now();
+
+            //hash the corpse ID for sharing via twitter
+            String sharedCorpseID = corpseID.createCorpseIDHash();
+
+            ShareCorpseMessage message = new ShareCorpseMessage(sharedCorpseID);
+            //print message for testing
+            System.out.println(message.getMessage());
+
+
+
+            //response.sendRedirect("/shared.jsp?corpse=" + corpseID);
 
         }
 
