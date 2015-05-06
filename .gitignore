@@ -2,3 +2,4 @@
 src/main/webapp/WEB-INF/appengine-web.xml
 src/main/webapp/mmapikey.txt
 target
+.idea
