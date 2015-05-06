@@ -6,11 +6,19 @@
         <servlet-name>CorpseController</servlet-name>
         <servlet-class>com.kyleh.exquisite.controllers.CorpseController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>SharedCorpseController</servlet-name>
+        <servlet-class>com.kyleh.exquisite.controllers.SharedCorpseController</servlet-class>
+    </servlet>
 
 
     <servlet-mapping>
         <servlet-name>CorpseController</servlet-name>
         <url-pattern>/exquisite</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SharedCorpseController</servlet-name>
+        <url-pattern>/share</url-pattern>
     </servlet-mapping>
 
 
