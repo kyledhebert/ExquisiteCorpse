@@ -14,6 +14,13 @@
 
 <h2>An Exquisite Lyrics</h2>
 
+<table>
+    <c:forEach var="corpseLyric" items="${corpse.corpseLyrics}">
+        <tr>
+            <td>${corpseLyric.snippet}</td>
+        </tr>
+    </c:forEach>
+</table>
 
 
 <c:import url="/includes/footer.jsp" />

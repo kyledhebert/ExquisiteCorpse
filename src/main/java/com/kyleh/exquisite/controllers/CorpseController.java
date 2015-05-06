@@ -71,6 +71,8 @@ public class CorpseController extends HttpServlet {
 
         //search for and display the lyric snippet at result.jsp
         else if (action.equals("result")) {
+
+
             String artistSearch = request.getParameter("artist");
             String trackSearch = request.getParameter("track");
 
@@ -89,6 +91,15 @@ public class CorpseController extends HttpServlet {
 
             String artist = trackData.getArtistName();
             String track = trackData.getTrackName();
+
+            //validate the search parameters
+            String message;
+            if (artist == null || track == null || artist.isEmpty() || track.isEmpty()) {
+                message = "Please enter text into both boxes.";
+                url = "/index.jsp";
+            }
+
+
 
             //snippet search
             int trackID = trackData.getTrackId();
@@ -111,12 +122,6 @@ public class CorpseController extends HttpServlet {
 
             session.setAttribute("result", searchResult);
 
-            //validate the search parameters
-            String message;
-            if (artist == null || track == null || artist.isEmpty() || track.isEmpty()) {
-                message = "Please enter text into both boxes.";
-                url = "/index.jsp";
-            }
 
             //set SearchResult Object in request object and set URL
             request.setAttribute("searchResult", searchResult);

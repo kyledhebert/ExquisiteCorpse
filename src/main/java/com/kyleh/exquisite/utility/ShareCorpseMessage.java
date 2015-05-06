@@ -17,7 +17,7 @@ public class ShareCorpseMessage {
     }
 
     private String createMessage(String sharedCorpseID) {
-        message = "Check out my Exquisite Lyrics Corpse! http://localhost:8080/shared?id=" +sharedCorpseID + " #exquisitelyrics";
+        message = "Check out my Exquisite Lyrics Corpse! http://localhost:8080/share.sjp?id=" +sharedCorpseID + " #exquisitelyrics";
         return message;
     }
 

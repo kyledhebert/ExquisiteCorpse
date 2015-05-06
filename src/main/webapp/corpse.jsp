@@ -10,9 +10,10 @@
 <c:import url="/includes/header.jsp" />
 
 <h2>Your Corpse</h2>
-<c:choose>
-    <c:when test=""
-</c:choose>
+<!-- need to create empty corpse condition here -->
+
+
+
 <table>
 <c:forEach var="corpseLyric" items="${corpse.corpseLyrics}">
 <tr>
