@@ -15,7 +15,7 @@
 <h2>An Exquisite Lyrics</h2>
 
 <table>
-    <c:forEach var="corpseLyric" items="${corpse.corpseLyrics}">
+    <c:forEach var="corpseLyric" items="${sharedCorpse.corpseLyrics}">
         <tr>
             <td>${corpseLyric.snippet}</td>
         </tr>

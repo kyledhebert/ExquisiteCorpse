@@ -1,5 +1,4 @@
 package com.kyleh.exquisite.utility;
-import org.hashids.Hashids;
 
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -23,7 +22,7 @@ public class CorpseID {
 
     /**
      * Each Shared Corpse will have a long based on timestamp,
-     * this vallue will be stored as the key in the datastore
+     * this value will be stored as the key in the GAE Datastore
      */
     private long createCorpseID() {
         //based on http://stackoverflow.com/questions/9191288/creating-a-unique-timestamp-in-java
@@ -40,31 +39,8 @@ public class CorpseID {
         }
     }
 
-    public String toString() {
+    public String corpseIDToString(CorpseID corpseID) {
         return String.valueOf(corpseID);
     }
-
-    /**
-     * The hashed ID will be used in the sharing URL
-     * @return
-     */
-    public String createCorpseIDHash() {
-
-        //generate a long based on timestamp
-        long timestamp = getCorpseID();
-
-        //using Hashids, convert long to hash
-        Hashids hashids = new Hashids("that is an exquisite corpse");
-
-        return hashids.encode(timestamp);
-    }
-
-
-
-
-
-
-
-
 
 }

@@ -7,21 +7,21 @@ package com.kyleh.exquisite.utility;
  */
 public class ShareCorpseMessage {
 
-    String message;
-    String sharedCorpseID;
+    java.lang.String message;
+    long corpseID;
 
 
-    public ShareCorpseMessage(String sharedCorpseID) {
-        this.sharedCorpseID = sharedCorpseID;
-        this.message = createMessage(sharedCorpseID);
+    public ShareCorpseMessage(long corpseID) {
+        this.corpseID = corpseID;
+        this.message = createMessage(corpseID);
     }
 
-    private String createMessage(String sharedCorpseID) {
-        message = "Check out my Exquisite Lyrics Corpse! http://localhost:8080/share.sjp?id=" +sharedCorpseID + " #exquisitelyrics";
+    private java.lang.String createMessage(long corpseID) {
+        message = "Check out my Exquisite Lyrics Corpse! http://localhost:8080/share?id=" + corpseID + " #exquisitelyrics";
         return message;
     }
 
-    public String getMessage() {
+    public java.lang.String getMessage() {
         return message;
     }
 }

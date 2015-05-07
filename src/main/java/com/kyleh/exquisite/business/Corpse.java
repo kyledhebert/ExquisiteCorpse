@@ -1,5 +1,7 @@
 package com.kyleh.exquisite.business;
 
+import com.googlecode.objectify.annotation.Index;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 

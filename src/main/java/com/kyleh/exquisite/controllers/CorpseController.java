@@ -1,5 +1,6 @@
 package com.kyleh.exquisite.controllers;
 
+import com.googlecode.objectify.Result;
 import com.kyleh.exquisite.business.Corpse;
 import com.kyleh.exquisite.business.CorpseLyric;
 import com.kyleh.exquisite.business.SearchResult;
@@ -55,11 +56,11 @@ public class CorpseController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        String url = "/index.jsp";
+        java.lang.String url = "/index.jsp";
         ServletContext servletContext = getServletContext();
 
         //get current action
-        String action = request.getParameter("action");
+        java.lang.String action = request.getParameter("action");
         if (action == null) {
             action = "search"; //default action
         }
@@ -73,8 +74,8 @@ public class CorpseController extends HttpServlet {
         else if (action.equals("result")) {
 
 
-            String artistSearch = request.getParameter("artist");
-            String trackSearch = request.getParameter("track");
+            java.lang.String artistSearch = request.getParameter("artist");
+            java.lang.String trackSearch = request.getParameter("track");
 
 
             //Fuzzy Search
@@ -89,28 +90,28 @@ public class CorpseController extends HttpServlet {
 
             trackData = track.getTrack();
 
-            String artist = trackData.getArtistName();
-            String track = trackData.getTrackName();
+            java.lang.String artist = trackData.getArtistName();
+            java.lang.String track = trackData.getTrackName();
 
             //validate the search parameters
-            String message;
-            if (artist == null || track == null || artist.isEmpty() || track.isEmpty()) {
-                message = "Please enter text into both boxes.";
-                url = "/index.jsp";
-            }
+//            String message;
+//            if (artist == null || track == null || artist.isEmpty() || track.isEmpty()) {
+//                message = "Please enter text into both boxes.";
+//                url = "/index.jsp";
+//            }
 
 
 
             //snippet search
             int trackID = trackData.getTrackId();
-            String resultID = Integer.toString(trackID);
+            java.lang.String resultID = Integer.toString(trackID);
 
             try {
                 snippet = musixMatch.getSnippet(trackID);
             } catch (MusixMatchException e) {
                 e.printStackTrace();
             }
-            String lyricSnippet = snippet.getSnippetBody();
+            java.lang.String lyricSnippet = snippet.getSnippetBody();
 
             //find the first newline character in the result so we can create a snippet
             //int newline = lyricsBody.indexOf("\n");
@@ -161,7 +162,7 @@ public class CorpseController extends HttpServlet {
         else if (action.equals("remove")) {
             HttpSession session = request.getSession();
             Corpse corpse = (Corpse) session.getAttribute("corpse");
-            String snippetID = request.getParameter("snippetID");
+            java.lang.String snippetID = request.getParameter("snippetID");
             CorpseLyric corpseLyric = (CorpseLyric) session.getAttribute(snippetID);
             corpse.removeLyricSnippet(corpseLyric);
 
@@ -176,23 +177,17 @@ public class CorpseController extends HttpServlet {
             ArrayList<CorpseLyric> corpseLyrics = corpse.getCorpseLyrics();
             CorpseID corpseID = new CorpseID();
 
-            //convert corpseID to string so we can store is a ID in the datastore
-            String corpseIDToString = corpseID.toString();
-
-
-            SharedCorpse sharedCorpse = new SharedCorpse(corpseLyrics,corpseIDToString);
+            SharedCorpse sharedCorpse = new SharedCorpse(corpseLyrics, corpseID.getCorpseID());
             ObjectifyService.ofy().save().entity(sharedCorpse).now();
 
-            //hash the corpse ID for sharing via twitter
-            String sharedCorpseID = corpseID.createCorpseIDHash();
 
-            ShareCorpseMessage message = new ShareCorpseMessage(sharedCorpseID);
+
+            ShareCorpseMessage message = new ShareCorpseMessage(corpseID.getCorpseID());
             //print message for testing
             System.out.println(message.getMessage());
 
 
 
-            //response.sendRedirect("/shared.jsp?corpse=" + corpseID);
 
         }
 
@@ -206,9 +201,9 @@ public class CorpseController extends HttpServlet {
 
     }
 
-    protected String getMusixMatchAPIKey() {
+    protected java.lang.String getMusixMatchAPIKey() {
         //used to read in the musixmatch API key from a file
-        String apiKey = "";
+        java.lang.String apiKey = "";
         try {
             FileReader fileReader = new FileReader("mmapikey.txt");
             BufferedReader bufferedReader = new BufferedReader(fileReader);
