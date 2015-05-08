@@ -1,12 +1,10 @@
 package com.kyleh.exquisite.controllers;
 
 import com.googlecode.objectify.Result;
-import com.kyleh.exquisite.business.Corpse;
-import com.kyleh.exquisite.business.CorpseLyric;
-import com.kyleh.exquisite.business.SearchResult;
-import com.kyleh.exquisite.business.SharedCorpse;
+import com.kyleh.exquisite.business.*;
 import com.kyleh.exquisite.utility.CorpseID;
 
+import com.kyleh.exquisite.utility.ShareCorpse;
 import com.kyleh.exquisite.utility.ShareCorpseMessage;
 import org.jmusixmatch.MusixMatch;
 import org.jmusixmatch.MusixMatchException;
@@ -36,13 +34,12 @@ import com.googlecode.objectify.ObjectifyService;
 /**
  * Created by kylehebert on 4/24/15.
  * Servlet responsible for searching for and adding lyrics
- * to a Corpse object.
+ * to and Sharing a Corpse object.
  */
 public class CorpseController extends HttpServlet {
 
     TrackData trackData;
     Track track;
-    Lyrics lyrics;
     Snippet snippet;
 
     MusixMatch musixMatch = new MusixMatch(getMusixMatchAPIKey());
@@ -56,11 +53,11 @@ public class CorpseController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        java.lang.String url = "/index.jsp";
+        String url = "/index.jsp";
         ServletContext servletContext = getServletContext();
 
         //get current action
-        java.lang.String action = request.getParameter("action");
+        String action = request.getParameter("action");
         if (action == null) {
             action = "search"; //default action
         }
@@ -73,61 +70,58 @@ public class CorpseController extends HttpServlet {
         //search for and display the lyric snippet at result.jsp
         else if (action.equals("result")) {
 
+            //get the search parameters and store them in a SnippetSearch object
+            String artistSearch = request.getParameter("artist");
+            String trackSearch = request.getParameter("track");
 
-            java.lang.String artistSearch = request.getParameter("artist");
-            java.lang.String trackSearch = request.getParameter("track");
-
-
-            //Fuzzy Search
-            try {
-                track = musixMatch.getMatchingTrack(trackSearch, artistSearch);
-
-            } catch (MusixMatchException e) {
-                System.out.println("Artist or track not found");
-                e.printStackTrace();
-
-            }
-
-            trackData = track.getTrack();
-
-            java.lang.String artist = trackData.getArtistName();
-            java.lang.String track = trackData.getTrackName();
+            //SnippetSearch snippetSearch = new SnippetSearch(artistSearch,trackSearch);
 
             //validate the search parameters
-//            String message;
-//            if (artist == null || track == null || artist.isEmpty() || track.isEmpty()) {
-//                message = "Please enter text into both boxes.";
-//                url = "/index.jsp";
-//            }
-
-
-
-            //snippet search
-            int trackID = trackData.getTrackId();
-            java.lang.String resultID = Integer.toString(trackID);
-
-            try {
-                snippet = musixMatch.getSnippet(trackID);
-            } catch (MusixMatchException e) {
-                e.printStackTrace();
+            String message = "";
+            if (artistSearch == null || trackSearch == null || artistSearch.isEmpty() || trackSearch.isEmpty()) {
+                message = "Please enter both a track and artist";
+                url = "/index.jsp";
             }
-            java.lang.String lyricSnippet = snippet.getSnippetBody();
+            else {
+                //Fuzzy Search
+                try {
+                    track = musixMatch.getMatchingTrack(trackSearch, artistSearch);
 
-            //find the first newline character in the result so we can create a snippet
-            //int newline = lyricsBody.indexOf("\n");
-            //String lyricSnippet = lyricsBody.substring(0,newline);
+                } catch (MusixMatchException e) {
+                    System.out.println("Artist or track not found");
+                    e.printStackTrace();
 
-            //store results in SearchResult object and create a session
-            HttpSession session = request.getSession();
-            SearchResult searchResult = new SearchResult(resultID,artist,track,lyricSnippet);
+                }
 
-            session.setAttribute("result", searchResult);
+                trackData = track.getTrack();
+
+                String artist = trackData.getArtistName();
+                String track = trackData.getTrackName();
 
 
-            //set SearchResult Object in request object and set URL
-            request.setAttribute("searchResult", searchResult);
-            url = "/result.jsp"; //the results page
+                //snippet search
+                int trackID = trackData.getTrackId();
+                String resultID = Integer.toString(trackID);
 
+                try {
+                    snippet = musixMatch.getSnippet(trackID);
+                } catch (MusixMatchException e) {
+                    e.printStackTrace();
+                }
+                String lyricSnippet = snippet.getSnippetBody();
+
+                //store results in SearchResult object and create a session
+                HttpSession session = request.getSession();
+                SearchResult searchResult = new SearchResult(resultID,artist,track,lyricSnippet);
+
+                session.setAttribute("result", searchResult);
+
+                //set SearchResult Object in request object and set URL
+                request.setAttribute("searchResult", searchResult);
+                url = "/result.jsp"; //the results page
+
+            }
+            request.setAttribute("message", message);
         }
 
         //convert result to CorpseLyric object and add to Corpse object
@@ -151,18 +145,16 @@ public class CorpseController extends HttpServlet {
             //this will be useful for removing lyrics later
             session.setAttribute(corpseLyric.getSnippetID(),corpseLyric);
 
-
             corpse.addLyricSnippet(corpseLyric);
 
             session.setAttribute("corpse", corpse);
             url = "/corpse.jsp";
-
         }
 
         else if (action.equals("remove")) {
             HttpSession session = request.getSession();
             Corpse corpse = (Corpse) session.getAttribute("corpse");
-            java.lang.String snippetID = request.getParameter("snippetID");
+            String snippetID = request.getParameter("snippetID");
             CorpseLyric corpseLyric = (CorpseLyric) session.getAttribute(snippetID);
             corpse.removeLyricSnippet(corpseLyric);
 
@@ -186,6 +178,11 @@ public class CorpseController extends HttpServlet {
             //print message for testing
             System.out.println(message.getMessage());
 
+            ShareCorpse shareCorpse = new ShareCorpse();
+
+            shareCorpse.shareCorpseOnTwitter(message);
+
+
 
 
 
@@ -201,9 +198,9 @@ public class CorpseController extends HttpServlet {
 
     }
 
-    protected java.lang.String getMusixMatchAPIKey() {
+    protected String getMusixMatchAPIKey() {
         //used to read in the musixmatch API key from a file
-        java.lang.String apiKey = "";
+        String apiKey = "";
         try {
             FileReader fileReader = new FileReader("mmapikey.txt");
             BufferedReader bufferedReader = new BufferedReader(fileReader);

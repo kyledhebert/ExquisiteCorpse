@@ -16,12 +16,12 @@ public class ShareCorpseMessage {
         this.message = createMessage(corpseID);
     }
 
-    private java.lang.String createMessage(long corpseID) {
+    private String createMessage(long corpseID) {
         message = "Check out my Exquisite Lyrics Corpse! http://localhost:8080/share?id=" + corpseID + " #exquisitelyrics";
         return message;
     }
 
-    public java.lang.String getMessage() {
+    public String getMessage() {
         return message;
     }
 }

@@ -3,6 +3,7 @@ package com.kyleh.exquisite.controllers;
 import com.googlecode.objectify.ObjectifyService;
 
 import com.googlecode.objectify.Result;
+import com.kyleh.exquisite.business.CorpseLyric;
 import com.kyleh.exquisite.business.SharedCorpse;
 
 import javax.servlet.ServletContext;

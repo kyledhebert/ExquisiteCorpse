@@ -13,10 +13,8 @@
     <H1>Start Building an Exquisite Corpse</H1>
     <p>Exquisite corpse, also known as exquisite cadaver (from the original French term cadavre exquis) or rotating corpse, is a method by which a collection of words or images is collectively assembled.</p>
     <p>You can build your own Exquisite Corpse using the lyrics from your favorite artists and bands. Just search for a lyric snippet below to get started.</p>
-    <c:if test="${message != null}">
-    <p><i>${message}</i></p>
-    </c:if>
 
+    <p><i>${message}</i></p>
     <form action = "exquisite"  method= "post">
       <input type = "hidden" name = "action" value = "result">
       <label>Track:</label>
