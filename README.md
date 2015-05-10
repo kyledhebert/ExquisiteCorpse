@@ -1,10 +1,9 @@
-Exqusite Lyrics is a Java application that uses lyric snippets from the MusixMatch API to create an exquisite corpse built to run on Google App Engine.
+Exquisite Lyrics is a Java application that uses lyric snippets from the MusixMatch API to create an exquisite corpse built to run on Google App Engine.
 
-#What is Exqusite Corpse?
+#What is Exquisite Corpse?
 
 From Wikipedia:
 >Exquisite corpse, also known as exquisite cadaver (from the original French term cadavre exquis) or rotating corpse, is a method by which a collection of words or images is collectively assembled. Each collaborator adds to a composition in sequence, either by following a rule (e.g. "The adjective noun adverb verb the adjective noun", as in "The green duck sweetly sang the dreadful dirge") or by being allowed to see only the end of what the previous person contributed.
-
 
 #Running The Program
 Before you can run this program you will need to request a MusixMatch API key, which can be done here: https://developer.musixmatch.com
