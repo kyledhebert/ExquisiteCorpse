@@ -22,6 +22,12 @@ import java.io.IOException;
 
 public class SharedCorpseController extends HttpServlet {
 
+    //register class for Objectify
+    static {
+        ObjectifyService.register(SharedCorpse.class);
+    }
+
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -36,13 +42,12 @@ public class SharedCorpseController extends HttpServlet {
 
         if (action.equals("display")) {
 
-            //retrieve the hashed corpse id from the url
-            String sharedID = request.getParameter("id");
+            //retrieve the corpse id from the url
+            long sharedID = Long.parseLong(request.getParameter("id"));
 
-            Result<SharedCorpse> sharedCorpseResult = ObjectifyService.ofy().load().type(SharedCorpse.class).id(sharedID);
             SharedCorpse sharedCorpse = ObjectifyService.ofy().load().type(SharedCorpse.class).id(sharedID).now();
-
             url = "/shared.jsp";
+            request.setAttribute("sharedCorpse", sharedCorpse);
         }
 
         //forward request and response objects to specified URL

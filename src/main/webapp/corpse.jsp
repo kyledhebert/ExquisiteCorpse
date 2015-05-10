@@ -13,7 +13,7 @@
 <!-- need to create empty corpse condition here -->
 
 
-
+<p><i>${message}</i></p>
 <table>
 <c:forEach var="corpseLyric" items="${corpse.corpseLyrics}">
 <tr>

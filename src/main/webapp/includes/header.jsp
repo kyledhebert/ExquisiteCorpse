@@ -22,7 +22,7 @@
 <header>
     <img src="<c:url value='/images/logo.png'/>"
          alt="Exquisite Lyrics Logo">
-    <h2>Without tradition, art is a flock of sheep without a shepherd. Without innovation, it is a corpse.</h2>
+    <h2>"Without tradition, art is a flock of sheep without a shepherd. Without innovation, it is a corpse." - Winston Churchill</h2>
 </header>
 <nav id="nav_bar">
     <ul>

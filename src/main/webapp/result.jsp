@@ -13,7 +13,9 @@
 <p>You searched for ${searchResult.track} by ${searchResult.artist}. </p>
 
 
-<p><span>${searchResult.snippet}</span></p>
+<p><span id="snippet">${searchResult.snippet}</span></p>
+
+<p>Use the Add Snippet button to add the lyric to your corpse.</p>
 
 <p>To search again use the New Search button below, or your browser's back button.</p>
 

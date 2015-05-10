@@ -17,6 +17,10 @@ public class SharedCorpse extends Corpse {
 
     @Id long corpseID;
 
+    public SharedCorpse(){
+
+    }
+
 
     public SharedCorpse(ArrayList<CorpseLyric> corpseLyrics, long corpseID) {
         super(corpseLyrics);

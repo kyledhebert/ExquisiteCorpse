@@ -31,13 +31,6 @@ public class CorpseLyric implements Serializable {
         this.snippet = snippet;
     }
 
-    public String getSnippetIncluded() {
-        return snippetIncluded;
-    }
-
-    public void setSnippetIncluded(String snippetIncluded) {
-        this.snippetIncluded = snippetIncluded;
-    }
 
     public String getSnippetID() {
         return snippetID;

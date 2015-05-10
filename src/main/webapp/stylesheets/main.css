@@ -56,6 +56,8 @@ header h2 {
     color: green;
     font-style: italic;
     margin-left: 120px;
+    padding-left: 500px;
+
 }
 header img {
     float: left;
@@ -80,16 +82,8 @@ header img {
     border-left: 2px solid black;
 }
 
-/* the styles for the side navigation bar */
-#sidebarA ul {
-    margin-left: 0;
-    list-style: none;
-}
-#sidebarA li {
-    margin-bottom: .5em;
-}
 
-/* the styles for the section */
+/* the styles for the main section */
 section {
     width: 520px;
     padding-right: 20px;
@@ -106,147 +100,10 @@ section h2 {
     margin-top: 1em;
 }
 
-/* product */
-section img {
-    float: left;
-    margin-right: 1em;
-    margin-bottom: 1em;
+#snippet {
+    background-color: #99d699;
+    font-size: 200%;
 }
-.clear_both {
-    clear: both;
-}
-
-/* email list */
-section label {
-    float: left;
-    width: 8em;
-    margin-bottom: 0.5em;
-    font-weight: bold;
-    padding-top: 0.25em;
-}
-section input[type="text"], input[type="email"], input[type="password"] {
-    width: 12em;
-    margin-left: 0.5em;
-    margin-bottom: 0.5em;
-}
-section input[type="submit"] {
-    margin-left: 0.5em;
-}
-br {
-    clear: both;
-}
-#submit {
-    margin-left: 0.5em;
-}
-
-
-table {
-    border: none;
-}
-th {
-    vertical-align: bottom;
-    text-align: left;
-}
-td {
-    vertical-align: top;
-}
-th, td {
-    padding: .3em;
-}
-.top {
-    vertical-align: top;
-}
-
-/* the style for the cart pages */
-.cart {
-    width: 700px;
-}
-.cart label {
-    float: left;
-    width: 10em;
-    font-weight: bold;
-    padding-top: 0.25em;
-}
-.cart input[type="text"], input[type="email"], input[type="password"] {
-    float: left;
-    width: 12em;
-    margin-left: 0.5em;
-    margin-right: 0.2em;
-}
-.cart input[type="button"] {
-    margin-left: 0.5em;
-}
-.cart select {
-    margin-left: 0.5em;
-    margin-right: 0.2em;
-}
-.cart_row input[type="text"] {
-    width: 2em;
-    margin-left: 0em;
-}
-#required {
-    margin-left: 8.5em;
-    margin-bottom: .5em;
-}
-.required {
-    color: red;
-    margin-bottom: 0;
-}
-#quantity_text {
-    width: 2em;
-}
-#float_left {
-    float: left;
-    margin-right: 1em;
-}
-
-/* the style for the admin pages */
-#admin {
-    width: 700px;
-}
-#admin form {
-    margin-top: .5em;
-}
-#admin label {
-    width: 14em;
-    margin-left: .5em;
-    padding-top: 0.25em;
-}
-#admin .left_margin {
-    margin-left: 0em;
-}
-
-
-/* the styles for the sidebars */
-aside h1 {
-    font-size: 125%;
-    padding-bottom: .5em;
-}
-aside h2 {
-    font-size: 100%;
-    color: green;
-    padding-bottom: .5em;
-}
-aside p {
-    margin-bottom: .5em;
-}
-aside img {
-    margin-bottom: 1em;
-}
-#sidebarA {
-    width: 180px;
-    float: left;
-    height: 400px;
-    border-right: 2px solid #ef9c00;
-}
-#sidebarB {
-    width: 180px;
-    float: right;
-    height: 400px;
-    padding-left: 20px;
-    border-left: 2px solid #ef9c00;
-}
-
 
 /* the styles for the footer */
 footer {
@@ -260,16 +117,3 @@ footer p {
     text-align: right;
 }
 
-/* The styles for the classes */
-.pad_top {
-    padding-top: 0.25em;
-}
-.no_pad_top {
-    padding-top: 0;
-}
-.margin_left {
-    margin-left: 0.5em;
-}
-.no_underline {
-    text-decoration:none;
-}

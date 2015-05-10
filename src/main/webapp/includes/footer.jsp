@@ -17,7 +17,7 @@
 <footer>
     <p>&copy; Copyright <%= currentYear %>  Kyle Hebert
         All rights reserved.</p>
-    <p>Lyrics provided by <a href="<c:url value='http://www.musixmatch.com/resources'/> ">MusixMatch</a> MusixMatch</p>
+    <p>Lyrics provided by <a href="<c:url value='http://www.musixmatch.com/resources'/> ">MusixMatch</a></p>
 </footer>
 </body>
 </html>

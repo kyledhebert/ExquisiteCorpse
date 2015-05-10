@@ -8,7 +8,6 @@ import com.kyleh.exquisite.utility.ShareCorpse;
 import com.kyleh.exquisite.utility.ShareCorpseMessage;
 import org.jmusixmatch.MusixMatch;
 import org.jmusixmatch.MusixMatchException;
-import org.jmusixmatch.entity.lyrics.Lyrics;
 import org.jmusixmatch.entity.track.Track;
 import org.jmusixmatch.entity.track.TrackData;
 import org.jmusixmatch.snippet.Snippet;
@@ -44,7 +43,7 @@ public class CorpseController extends HttpServlet {
 
     MusixMatch musixMatch = new MusixMatch(getMusixMatchAPIKey());
 
-    //register classes for Objectify
+    //register class for Objectify
     static {
         ObjectifyService.register(SharedCorpse.class);
     }
@@ -65,6 +64,13 @@ public class CorpseController extends HttpServlet {
         //perform action and set URL to appropriate page
         if (action.equals("search")) {
             url = "/index.jsp"; //the search page
+        }
+
+        if (action.equals("reset")) {
+            //remove the old corspe session, so new ones can be created
+            HttpSession session = request.getSession();
+            session.removeAttribute("corpse");
+            url ="/index.jsp";
         }
 
         //search for and display the lyric snippet at result.jsp
@@ -133,7 +139,6 @@ public class CorpseController extends HttpServlet {
             HttpSession session = request.getSession();
             Corpse corpse = (Corpse) session.getAttribute("corpse");
             if (corpse == null) {
-                request.setAttribute("emptyCorpse", "You Corpse has no lyrics");
                 corpse = new Corpse();
             }
 
@@ -169,23 +174,22 @@ public class CorpseController extends HttpServlet {
             ArrayList<CorpseLyric> corpseLyrics = corpse.getCorpseLyrics();
             CorpseID corpseID = new CorpseID();
 
+            //create a SharedCorpse and add it to the Data Store
             SharedCorpse sharedCorpse = new SharedCorpse(corpseLyrics, corpseID.getCorpseID());
             ObjectifyService.ofy().save().entity(sharedCorpse).now();
 
-
-
+            //Create the share message for Twitter
             ShareCorpseMessage message = new ShareCorpseMessage(corpseID.getCorpseID());
-            //print message for testing
-            System.out.println(message.getMessage());
 
+            //Share the URL on Twitter
             ShareCorpse shareCorpse = new ShareCorpse();
-
             shareCorpse.shareCorpseOnTwitter(message);
 
+            //create the share URL for the Success page
+            String sharedURL = sharedCorpseURL(corpseID);
+            request.setAttribute("sharedURL", sharedURL);
 
-
-
-
+            url = "/success.jsp";
         }
 
         //forward request and response objects to specified URL
@@ -194,8 +198,12 @@ public class CorpseController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        doPost(request,response);
+        doPost(request, response);
 
+    }
+
+    protected String sharedCorpseURL(CorpseID corpseID){
+        return "http://localhost:8080/share?id=" + corpseID.getCorpseID();
     }
 
     protected String getMusixMatchAPIKey() {
@@ -205,6 +213,7 @@ public class CorpseController extends HttpServlet {
             FileReader fileReader = new FileReader("mmapikey.txt");
             BufferedReader bufferedReader = new BufferedReader(fileReader);
             apiKey = bufferedReader.readLine();
+            bufferedReader.close();
             fileReader.close();
 
 
