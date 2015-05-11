@@ -6,6 +6,8 @@ import com.kyleh.exquisite.utility.CorpseID;
 
 import com.kyleh.exquisite.utility.ShareCorpse;
 import com.kyleh.exquisite.utility.ShareCorpseMessage;
+import com.kyleh.exquisite.utility.ExquisiteConstants;
+
 import org.jmusixmatch.MusixMatch;
 import org.jmusixmatch.MusixMatchException;
 import org.jmusixmatch.entity.track.Track;
@@ -52,33 +54,33 @@ public class CorpseController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        String url = "/index.jsp";
+        String url = ExquisiteConstants.INDEX_URL;
         ServletContext servletContext = getServletContext();
 
         //get current action
         String action = request.getParameter("action");
         if (action == null) {
-            action = "search"; //default action
+            action = ExquisiteConstants.SEARCH; //default action
         }
 
         //perform action and set URL to appropriate page
-        if (action.equals("search")) {
-            url = "/index.jsp"; //the search page
+        if (action.equals(ExquisiteConstants.SEARCH)) {
+            url = ExquisiteConstants.INDEX_URL; //the search page
         }
 
-        if (action.equals("reset")) {
+        if (action.equals(ExquisiteConstants.RESET)) {
             //remove the old corspe session, so new ones can be created
             HttpSession session = request.getSession();
-            session.removeAttribute("corpse");
-            url ="/index.jsp";
+            session.removeAttribute(ExquisiteConstants.CORPSE);
+            url = ExquisiteConstants.INDEX_URL;
         }
 
         //search for and display the lyric snippet at result.jsp
-        else if (action.equals("result")) {
+        else if (action.equals(ExquisiteConstants.RESULT)) {
 
             //get the search parameters and store them in a SnippetSearch object
-            String artistSearch = request.getParameter("artist");
-            String trackSearch = request.getParameter("track");
+            String artistSearch = request.getParameter(ExquisiteConstants.ARTIST);
+            String trackSearch = request.getParameter(ExquisiteConstants.TRACK);
 
             //SnippetSearch snippetSearch = new SnippetSearch(artistSearch,trackSearch);
 
@@ -86,7 +88,7 @@ public class CorpseController extends HttpServlet {
             String message = "";
             if (artistSearch == null || trackSearch == null || artistSearch.isEmpty() || trackSearch.isEmpty()) {
                 message = "Please enter both a track and artist";
-                url = "/index.jsp";
+                url = ExquisiteConstants.INDEX_URL;
             }
             else {
                 //Fuzzy Search
@@ -120,29 +122,29 @@ public class CorpseController extends HttpServlet {
                 HttpSession session = request.getSession();
                 SearchResult searchResult = new SearchResult(resultID,artist,track,lyricSnippet);
 
-                session.setAttribute("result", searchResult);
+                session.setAttribute(ExquisiteConstants.RESULT, searchResult);
 
                 //set SearchResult Object in request object and set URL
-                request.setAttribute("searchResult", searchResult);
-                url = "/result.jsp"; //the results page
+                request.setAttribute(ExquisiteConstants.SEARCH_RESULT, searchResult);
+                url = ExquisiteConstants.RESULT_URL; //the results page
 
             }
-            request.setAttribute("message", message);
+            request.setAttribute(ExquisiteConstants.MESSAGE, message);
         }
 
         //convert result to CorpseLyric object and add to Corpse object
-        else if (action.equals("add")) {
+        else if (action.equals(ExquisiteConstants.ADD)) {
 
             //String snippet = searchResult.getSnippet();
 
             //create a a new corpse and new corpse session if needed
             HttpSession session = request.getSession();
-            Corpse corpse = (Corpse) session.getAttribute("corpse");
+            Corpse corpse = (Corpse) session.getAttribute(ExquisiteConstants.CORPSE);
             if (corpse == null) {
                 corpse = new Corpse();
             }
 
-            SearchResult searchResult = (SearchResult) session.getAttribute("result");
+            SearchResult searchResult = (SearchResult) session.getAttribute(ExquisiteConstants.RESULT);
 
             CorpseLyric corpseLyric = new CorpseLyric(searchResult.getResultID(),searchResult.getSnippet());
 
@@ -152,24 +154,24 @@ public class CorpseController extends HttpServlet {
 
             corpse.addLyricSnippet(corpseLyric);
 
-            session.setAttribute("corpse", corpse);
+            session.setAttribute(ExquisiteConstants.CORPSE, corpse);
             url = "/corpse.jsp";
         }
 
-        else if (action.equals("remove")) {
+        else if (action.equals(ExquisiteConstants.REMOVE)) {
             HttpSession session = request.getSession();
-            Corpse corpse = (Corpse) session.getAttribute("corpse");
-            String snippetID = request.getParameter("snippetID");
+            Corpse corpse = (Corpse) session.getAttribute(ExquisiteConstants.CORPSE);
+            String snippetID = request.getParameter(ExquisiteConstants.SNIPPET_ID);
             CorpseLyric corpseLyric = (CorpseLyric) session.getAttribute(snippetID);
             corpse.removeLyricSnippet(corpseLyric);
 
-            url = "/corpse.jsp";
+            url = ExquisiteConstants.CORPSE_URL;
 
         }
 
-        else if (action.equals("share")) {
+        else if (action.equals(ExquisiteConstants.SHARE)) {
             HttpSession session = request.getSession();
-            Corpse corpse = (Corpse) session.getAttribute("corpse");
+            Corpse corpse = (Corpse) session.getAttribute(ExquisiteConstants.CORPSE);
 
             ArrayList<CorpseLyric> corpseLyrics = corpse.getCorpseLyrics();
             CorpseID corpseID = new CorpseID();
@@ -187,9 +189,9 @@ public class CorpseController extends HttpServlet {
 
             //create the share URL for the Success page
             String sharedURL = sharedCorpseURL(corpseID);
-            request.setAttribute("sharedURL", sharedURL);
+            request.setAttribute(ExquisiteConstants.SHARED_URL, sharedURL);
 
-            url = "/success.jsp";
+            url = ExquisiteConstants.SUCCESS_URL;
         }
 
         //forward request and response objects to specified URL
