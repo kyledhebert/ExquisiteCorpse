@@ -12,7 +12,7 @@ Finally, you will need a Google App Engine application ID, which can be acquired
 
 The application looks for the MusixMatch API key in a text file called mmapikey.txt. The Twitter Consumer Key and Consumer Secret need to be located in a file called twitterkeys.txt. Both files should be placed in the root of the webapp directory.
 
-In order for the app to run on Google App Engine you will need to add a file called app-engine.xml to the WEB-INF directory. Learn more about running a Java app on App Engine here: https://cloud.google.com/appengine/docs/java/gettingstarted/ui_and_code 
+In order for the app to run on Google App Engine you will need to add your app-engine.xml file to the WEB-INF directory. Learn more about running a Java app on App Engine here: https://cloud.google.com/appengine/docs/java/gettingstarted/ui_and_code 
 
 #Dependencies
 - jMusixMatch (https://github.com/sachin-handiekar/jMusixMatch)
