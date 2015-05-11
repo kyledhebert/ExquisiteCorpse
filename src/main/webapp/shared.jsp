@@ -22,7 +22,11 @@
     </c:forEach>
 </table>
 
-<p><input type="button" value="Create Your Own" ></p>
+<h2>Create Your Own</h2>
+<form action="exquisite" method="post">
+    <input type="hidden" name="action" value="reset">
+    <input type="submit" value="Create New Corpse">
+</form>
 
 <c:import url="/includes/footer.jsp" />
 
