@@ -13,33 +13,45 @@
 <!-- need to create empty corpse condition here -->
 
 
-<p><i>${message}</i></p>
-<table>
-<c:forEach var="corpseLyric" items="${corpse.corpseLyrics}">
-<tr>
-    <td>${corpseLyric.snippet}</td>
-    <td>
-        <form action ="exquisite" method="post">
-            <input type="hidden" name="snippetID" value="${corpseLyric.snippetID}">
-            <input type="hidden" name="action" value="remove">
-            <input type="submit" value="Remove Lyric">
+<c:choose>
+    <c:when test="${empty corpse.corpseLyrics}">
+        <p>You need to add some lyrics first!</p>
+        <form action = "exquisite" method = "post">
+            <input type = "hidden" name = "action" value = "search">
+            <input type = "submit" value = "Add A Lyric">
         </form>
-    </td>
-</tr>
-</c:forEach>
-</table>
 
-<p>To remove a lyric, click on the Remove button.</p>
+    </c:when>
+    <c:otherwise>
+        <table>
+            <c:forEach var="corpseLyric" items="${corpse.corpseLyrics}">
+                <tr>
+                    <td>${corpseLyric.snippet}</td>
+                    <td>
+                        <form action ="exquisite" method="post">
+                            <input type="hidden" name="snippetID" value="${corpseLyric.snippetID}">
+                            <input type="hidden" name="action" value="remove">
+                            <input type="submit" value="Remove Lyric">
+                        </form>
+                    </td>
+                </tr>
+            </c:forEach>
+        </table>
+        <p>To remove a lyric, click on the Remove button.</p>
 
-    <form action = "exquisite" method = "post">
-        <input type = "hidden" name = "action" value = "search">
-        <input type = "submit" value = "Add Another Lyric">
-    </form>
+        <form action = "exquisite" method = "post">
+            <input type = "hidden" name = "action" value = "search">
+            <input type = "submit" value = "Add Another Lyric">
+        </form>
 
-    <form action = "exquisite" method="post">
-        <input type = "hidden" name ="action" value ="share">
-        <input type ="submit" value="Share on Twitter">
-    </form>
+        <form action = "exquisite" method="post">
+            <input type = "hidden" name ="action" value ="share">
+            <input type ="submit" value="Share on Twitter">
+        </form>
+
+    </c:otherwise>
+</c:choose>
+
 
 <c:import url="/includes/footer.jsp" />
 

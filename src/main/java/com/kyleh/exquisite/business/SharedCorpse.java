@@ -9,7 +9,7 @@ import com.googlecode.objectify.annotation.Id;
 /**
  * Created by kylehebert on 5/4/15.
  * Objects of this class will represent an exquisite corpse that
- * gets added to the datastore for sharing with others
+ * gets added to the GAE Datastore for sharing with others
  */
 
 @Entity

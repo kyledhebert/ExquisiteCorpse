@@ -7,6 +7,7 @@ import java.io.Serializable;
  * Objects of this class will represent an individual lyric snippet the user
  * has decided to add to their corpse from the search results screen
  */
+
 public class CorpseLyric implements Serializable {
 
     private String snippet;

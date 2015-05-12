@@ -33,6 +33,12 @@ public class ExquisiteConstants {
     //denotes the share parameter in the CorpseController
     public static final String SHARE = "share";
 
+    //denotes the display parameter in the SharedCorpseController
+    public static final String DISPLAY = "display";
+
+    //denotes the id parameter in the SharedCorpseController
+    public static final String ID = "id";
+
     //denotes the snippet ID parameter in the CorpseController
     public static final String SNIPPET_ID = "snippetID";
 
@@ -45,20 +51,29 @@ public class ExquisiteConstants {
     //denotes the corpse url in the CorpseController
     public static final String CORPSE_URL = "/corpse.jsp";
 
+    //denotes the shared url in the SharedCorpseController
+    public static final String SHARED_URL = "/shared.jsp";
+
     //denotes the success url in the CorpseController
     public static final String SUCCESS_URL = "/success.jsp";
 
     //denotes the message attribute in the CorpseController
-    public static final String MESSAGE = "message";
+    public static final String MESSAGE_ATT = "message";
 
     //denotes the corpse attribute in the CorpseController
-    public static final String CORPSE = "corpse";
+    public static final String CORPSE_ATT = "corpse";
 
     //denotes the shared URL attribute in the CorpseController
-    public static final String SHARED_URL = "sharedURL";
+    public static final String SHARED_ATT = "sharedURL";
 
     //denotes the search result attribute in the CorpseController
-    public static final String SEARCH_RESULT = "searchResult";
+    public static final String RESULT_ATT = "searchResult";
+
+    //denotes the shared Corpse attribute in the SharedCorpseController
+    public static final String SHARED_CORPSE_ATT = "sharedCorpse";
+
+    //denotes the shared Corpse URL in the CorpseController
+    public static final String SHARED_URL_STRING = "http://localhost:8080/share?id=";
 
 
 

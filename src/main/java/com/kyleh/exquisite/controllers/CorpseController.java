@@ -1,9 +1,11 @@
 package com.kyleh.exquisite.controllers;
 
-import com.googlecode.objectify.Result;
-import com.kyleh.exquisite.business.*;
-import com.kyleh.exquisite.utility.CorpseID;
+import com.kyleh.exquisite.business.Corpse;
+import com.kyleh.exquisite.business.CorpseLyric;
+import com.kyleh.exquisite.business.SearchResult;
+import com.kyleh.exquisite.business.SharedCorpse;
 
+import com.kyleh.exquisite.utility.CorpseID;
 import com.kyleh.exquisite.utility.ShareCorpse;
 import com.kyleh.exquisite.utility.ShareCorpseMessage;
 import com.kyleh.exquisite.utility.ExquisiteConstants;
@@ -13,7 +15,6 @@ import org.jmusixmatch.MusixMatchException;
 import org.jmusixmatch.entity.track.Track;
 import org.jmusixmatch.entity.track.TrackData;
 import org.jmusixmatch.snippet.Snippet;
-
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -34,8 +35,8 @@ import com.googlecode.objectify.ObjectifyService;
 
 /**
  * Created by kylehebert on 4/24/15.
- * Servlet responsible for searching for and adding lyrics
- * to and Sharing a Corpse object.
+ * Servlet responsible for searching for lyrics ,adding and removing lyrics
+ * to Corpse object and Sharing a Corpse object.
  */
 public class CorpseController extends HttpServlet {
 
@@ -57,7 +58,7 @@ public class CorpseController extends HttpServlet {
         String url = ExquisiteConstants.INDEX_URL;
         ServletContext servletContext = getServletContext();
 
-        //get current action
+        //get current action from the .jsp forms
         String action = request.getParameter("action");
         if (action == null) {
             action = ExquisiteConstants.SEARCH; //default action
@@ -68,10 +69,11 @@ public class CorpseController extends HttpServlet {
             url = ExquisiteConstants.INDEX_URL; //the search page
         }
 
+
         if (action.equals(ExquisiteConstants.RESET)) {
-            //remove the old corspe session, so new ones can be created
+            //remove the old corpse session, so new ones can be created
             HttpSession session = request.getSession();
-            session.removeAttribute(ExquisiteConstants.CORPSE);
+            session.removeAttribute(ExquisiteConstants.CORPSE_ATT);
             url = ExquisiteConstants.INDEX_URL;
         }
 
@@ -81,8 +83,6 @@ public class CorpseController extends HttpServlet {
             //get the search parameters and store them in a SnippetSearch object
             String artistSearch = request.getParameter(ExquisiteConstants.ARTIST);
             String trackSearch = request.getParameter(ExquisiteConstants.TRACK);
-
-            //SnippetSearch snippetSearch = new SnippetSearch(artistSearch,trackSearch);
 
             //validate the search parameters
             String message = "";
@@ -96,8 +96,9 @@ public class CorpseController extends HttpServlet {
                     track = musixMatch.getMatchingTrack(trackSearch, artistSearch);
 
                 } catch (MusixMatchException e) {
+                    //TODO Display lyric not found instead of error_java.jsp
                     System.out.println("Artist or track not found");
-                    e.printStackTrace();
+                    //e.printStackTrace();
 
                 }
 
@@ -125,21 +126,20 @@ public class CorpseController extends HttpServlet {
                 session.setAttribute(ExquisiteConstants.RESULT, searchResult);
 
                 //set SearchResult Object in request object and set URL
-                request.setAttribute(ExquisiteConstants.SEARCH_RESULT, searchResult);
+                request.setAttribute(ExquisiteConstants.RESULT_ATT, searchResult);
                 url = ExquisiteConstants.RESULT_URL; //the results page
 
             }
-            request.setAttribute(ExquisiteConstants.MESSAGE, message);
+
+            request.setAttribute(ExquisiteConstants.MESSAGE_ATT, message);
         }
 
         //convert result to CorpseLyric object and add to Corpse object
         else if (action.equals(ExquisiteConstants.ADD)) {
 
-            //String snippet = searchResult.getSnippet();
-
             //create a a new corpse and new corpse session if needed
             HttpSession session = request.getSession();
-            Corpse corpse = (Corpse) session.getAttribute(ExquisiteConstants.CORPSE);
+            Corpse corpse = (Corpse) session.getAttribute(ExquisiteConstants.CORPSE_ATT);
             if (corpse == null) {
                 corpse = new Corpse();
             }
@@ -148,19 +148,24 @@ public class CorpseController extends HttpServlet {
 
             CorpseLyric corpseLyric = new CorpseLyric(searchResult.getResultID(),searchResult.getSnippet());
 
-            //set the lyric's session ID to the snippet ID
+            //set the lyrics' session ID to the snippet ID
             //this will be useful for removing lyrics later
             session.setAttribute(corpseLyric.getSnippetID(),corpseLyric);
 
             corpse.addLyricSnippet(corpseLyric);
 
-            session.setAttribute(ExquisiteConstants.CORPSE, corpse);
+            session.setAttribute(ExquisiteConstants.CORPSE_ATT, corpse);
+
+            //once a lyric gets added to a corpse, remove that lyrics' session
+            //TODO A search that should throw an error still returns the previous result instead
+            session.removeAttribute(ExquisiteConstants.RESULT);
+
             url = "/corpse.jsp";
         }
 
         else if (action.equals(ExquisiteConstants.REMOVE)) {
             HttpSession session = request.getSession();
-            Corpse corpse = (Corpse) session.getAttribute(ExquisiteConstants.CORPSE);
+            Corpse corpse = (Corpse) session.getAttribute(ExquisiteConstants.CORPSE_ATT);
             String snippetID = request.getParameter(ExquisiteConstants.SNIPPET_ID);
             CorpseLyric corpseLyric = (CorpseLyric) session.getAttribute(snippetID);
             corpse.removeLyricSnippet(corpseLyric);
@@ -171,7 +176,7 @@ public class CorpseController extends HttpServlet {
 
         else if (action.equals(ExquisiteConstants.SHARE)) {
             HttpSession session = request.getSession();
-            Corpse corpse = (Corpse) session.getAttribute(ExquisiteConstants.CORPSE);
+            Corpse corpse = (Corpse) session.getAttribute(ExquisiteConstants.CORPSE_ATT);
 
             ArrayList<CorpseLyric> corpseLyrics = corpse.getCorpseLyrics();
             CorpseID corpseID = new CorpseID();
@@ -189,7 +194,7 @@ public class CorpseController extends HttpServlet {
 
             //create the share URL for the Success page
             String sharedURL = sharedCorpseURL(corpseID);
-            request.setAttribute(ExquisiteConstants.SHARED_URL, sharedURL);
+            request.setAttribute(ExquisiteConstants.SHARED_ATT, sharedURL);
 
             url = ExquisiteConstants.SUCCESS_URL;
         }
@@ -205,7 +210,7 @@ public class CorpseController extends HttpServlet {
     }
 
     protected String sharedCorpseURL(CorpseID corpseID){
-        return "http://localhost:8080/share?id=" + corpseID.getCorpseID();
+        return ExquisiteConstants.SHARED_URL_STRING + corpseID.getCorpseID();
     }
 
     protected String getMusixMatchAPIKey() {
